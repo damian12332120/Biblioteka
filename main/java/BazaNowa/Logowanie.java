@@ -1,5 +1,8 @@
 package BazaNowa;
 
+import BazaNowa.admin.Administrator;
+import BazaNowa.wypozyczalnia.Wypozyczanie;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +33,19 @@ public class Logowanie implements Okna {
 
     public void logowanieListener() {
         zaloguj.addActionListener(a -> {
-                    if (!pobieranieUzytkownika().isEmpty()) {
+            List<Person> zalogowany = pobieranieUzytkownika();
+            if (sprawdzCzyAdmin(pobieranieDanych())) {
                         usuwanieElementow();
-                        Zalogowany z = new Zalogowany();
-                        z.dodajZalogowanego(pobieranieUzytkownika().get(0));
-                        Wypozyczanie wypozyczanie = new Wypozyczanie();
-                    }else{
-                        JOptionPane.showMessageDialog(frame,"Niewłaściwe dane","Błąd danych",JOptionPane.ERROR_MESSAGE);
+                        Administrator administrator = new Administrator();
+                    } else {
+                        if (!zalogowany.isEmpty()) {
+                            usuwanieElementow();
+                            Zalogowany z = new Zalogowany();
+                            z.dodajZalogowanego(zalogowany.get(0));
+                            Wypozyczanie wypozyczanie = new Wypozyczanie();
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "Niewłaściwe dane", "Błąd danych", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
         );
@@ -53,6 +62,13 @@ public class Logowanie implements Okna {
     }
 
 
+    public boolean sprawdzCzyAdmin(List<String> dane) {
+        if (dane.get(0).equals("1Admin") && dane.get(1).equals("admin")) {
+            return true;
+        }
+        return false;
+    }
+
     public void create() {
         createFrame();
         createButton();
@@ -61,7 +77,6 @@ public class Logowanie implements Okna {
 
     @Override
     public void createFrame() {
-        System.out.println("bbb");
         frame.setSize(350, 300);
     }
 

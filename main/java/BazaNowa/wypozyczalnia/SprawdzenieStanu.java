@@ -1,4 +1,10 @@
-package BazaNowa;
+package BazaNowa.wypozyczalnia;
+
+import BazaNowa.Ksiazka;
+import BazaNowa.Okna;
+import BazaNowa.Person;
+import BazaNowa.Zalogowany;
+import BazaNowa.wypozyczalnia.Wypozyczanie;
 
 import javax.swing.*;
 

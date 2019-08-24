@@ -34,11 +34,33 @@ public class Manager {
         Session session = hibernateConnection.getSessiong();
         Transaction transaction = session.beginTransaction();
         String hql = String.format("From Ksiazka e Where e.%s = '%s' and e.czyWypozyczona = '0'", poCzym, name);
-        List persons = session.createQuery(hql).list();
+        List ksiazki = session.createQuery(hql).list();
         transaction.commit();
         session.close();
-        return persons;
+        return ksiazki;
     }
+
+    public List<Ksiazka> getKsiazki() {
+        hibernateConnection.connect();
+        Session session = hibernateConnection.getSessiong();
+        Transaction transaction = session.beginTransaction();
+        String hql = "From Ksiazka e Where e.czyWypozyczona = '0'";
+        List ksiazki = session.createQuery(hql).list();
+        transaction.commit();
+        session.close();
+        return ksiazki;
+
+    }
+
+    public void addKsiazka(Ksiazka ksiazka) {
+        hibernateConnection.connect();
+        Session session = hibernateConnection.getSessiong();
+        Transaction transaction = session.beginTransaction();
+        session.save(ksiazka);
+        transaction.commit();
+        session.close();
+    }
+
 
     public void addKsiazka(Person person, Ksiazka ksiazka) {
         doItKsiazka(person, ksiazka);
@@ -46,6 +68,15 @@ public class Manager {
 
     public void removeKsiazka(Person person, Ksiazka ksiazka) {
         doItKsiazka(person, ksiazka);
+    }
+
+    public void removeKsiazka(Ksiazka ksiazka) {
+        hibernateConnection.connect();
+        Session session = hibernateConnection.getSessiong();
+        Transaction transaction = session.beginTransaction();
+        session.remove(ksiazka);
+        transaction.commit();
+        session.close();
     }
 
     public void doItKsiazka(Person person, Ksiazka ksiazka) {

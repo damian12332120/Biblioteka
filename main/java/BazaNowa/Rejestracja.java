@@ -48,7 +48,6 @@ public class Rejestracja implements Okna {
             return true;
         } else {
             JOptionPane.showMessageDialog(frame,"nieprawidłowa wartość: Hasło","Błąd danych",JOptionPane.ERROR_MESSAGE);
-            hasloP. setText("");
             return false;
         }
     }
@@ -58,7 +57,6 @@ public class Rejestracja implements Okna {
             return true;
         } else {
             JOptionPane.showMessageDialog(frame,"nieprawidłowa wartość: Imie","Błąd danych",JOptionPane.ERROR_MESSAGE);
-            imieT.setText("");
             return false;
         }
     }
@@ -139,7 +137,6 @@ public class Rejestracja implements Okna {
 
     @Override
     public void createFrame() {
-        System.out.println("aaa");
         frame.setSize(500, 300);
     }
 

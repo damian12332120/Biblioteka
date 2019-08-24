@@ -24,6 +24,10 @@ public class Person {
         listaKsiazek = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -38,6 +42,10 @@ public class Person {
 
     public String getHaslo() {
         return haslo;
+    }
+
+    public String getImie() {
+        return imie;
     }
 
     public String getNazwisko() {

@@ -1,4 +1,6 @@
-package BazaNowa;
+package BazaNowa.wypozyczalnia;
+
+import BazaNowa.*;
 
 import javax.swing.*;
 import java.util.List;

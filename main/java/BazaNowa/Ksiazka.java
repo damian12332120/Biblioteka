@@ -14,9 +14,14 @@ public class Ksiazka {
     private int rokWydania;
     private boolean czyWypozyczona;
 
+    public Ksiazka() {
+        czyWypozyczona = false;
+    }
+
     public boolean isCzyWypozyczona() {
         return czyWypozyczona;
     }
+
 
     public void setCzyWypozyczona(boolean czyWypozyczona) {
         this.czyWypozyczona = czyWypozyczona;
@@ -35,7 +40,7 @@ public class Ksiazka {
     }
 
     public void setAutor(String autor) {
-        autor = autor;
+        this.autor = autor;
     }
 
     public int getRokWydania() {
@@ -48,12 +53,11 @@ public class Ksiazka {
 
     @Override
     public String toString() {
-        return "Ksiazka{" +
+        return
                 "id=" + id +
                 ", tytul='" + tytul + '\'' +
                 ", Autor='" + autor + '\'' +
-                ", rokWydania=" + rokWydania +
-                '}';
+                ", rokWydania=" + rokWydania;
     }
 
     public long getId() {

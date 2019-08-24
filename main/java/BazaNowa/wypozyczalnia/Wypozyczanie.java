@@ -1,23 +1,36 @@
-package BazaNowa;
+package BazaNowa.wypozyczalnia;
+
+import BazaNowa.Logowanie;
+import BazaNowa.Okna;
 
 import javax.swing.*;
 
-public class Wypozyczanie implements Okna{
+public class Wypozyczanie implements Okna {
     private JButton wypozycz;
     private JButton zdaj;
     private JButton sprawdzStan;
+    private JButton powrot;
 
 
     public Wypozyczanie() {
+        create();
+        listener();
+    }
+
+    public void create(){
         createFrame();
         createButton();
+    }
+
+    public void listener(){
         wypozyczListener();
         zdajListener();
         sprawdzStanListener();
+        powrotListener();
     }
 
     public void createFrame() {
-        frame.setSize(400, 300);
+        frame.setSize(400, 320);
     }
 
     public void createButton() {
@@ -30,12 +43,17 @@ public class Wypozyczanie implements Okna{
         sprawdzStan = new JButton("Sprawdz stan");
         sprawdzStan.setBounds(120, 140, 150, 50);
         frame.add(sprawdzStan);
+        powrot = new JButton(" Powrót");
+        powrot.setBounds(120, 195, 150, 50);
+        frame.add(powrot);
+
     }
 
     public void usuwanieElementow() {
         frame.remove(wypozycz);
         frame.remove(zdaj);
         frame.remove(sprawdzStan);
+        frame.remove(powrot);
     }
 
     public void wypozyczListener() {
@@ -54,8 +72,15 @@ public class Wypozyczanie implements Okna{
 
     public void sprawdzStanListener() {
         sprawdzStan.addActionListener(a -> {
-          usuwanieElementow();
-          SprawdzenieStanu sprawdzenieStanu = new SprawdzenieStanu();
+            usuwanieElementow();
+            SprawdzenieStanu sprawdzenieStanu = new SprawdzenieStanu();
+        });
+    }
+
+    public void powrotListener() {
+        powrot.addActionListener(a -> {
+            usuwanieElementow();
+            Logowanie logowanie = new Logowanie();
         });
     }
 }

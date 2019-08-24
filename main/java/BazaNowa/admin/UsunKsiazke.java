@@ -1,18 +1,26 @@
-package BazaNowa;
+package BazaNowa.admin;
+
+import BazaNowa.Ksiazka;
+import BazaNowa.Manager;
+import BazaNowa.Okna;
+import BazaNowa.WalidacjaDanych;
 
 import javax.swing.*;
+import java.util.List;
 
-public class Zdaj implements Okna {
-    private JLabel wypozyczenia;
+public class UsunKsiazke implements Okna {
+    Manager manager;
+    private JLabel ksiazki;
     private JTextArea pole;
     private JTextField nrKsiazki;
     private JButton oddaj;
     private JButton powrotDoMenu;
 
-    public Zdaj() {
+    public UsunKsiazke() {
+        manager = new Manager();
         create();
         wypozyczoneKsiazki();
-        zdajKsiazke();
+        zdajKsiazke(wyszukajKsiazki());
         powrotListener();
     }
 
@@ -23,6 +31,8 @@ public class Zdaj implements Okna {
         createLabel();
     }
 
+
+
     @Override
     public void createFrame() {
         frame.setSize(500, 300);
@@ -30,7 +40,7 @@ public class Zdaj implements Okna {
 
     @Override
     public void createButton() {
-        oddaj = new JButton("Zdaj ksiazkę");
+        oddaj = new JButton("Usuń ksiazkę");
         oddaj.setBounds(320, 200, 120, 40);
         frame.add(oddaj);
         powrotDoMenu = new JButton("Powrót");
@@ -48,19 +58,23 @@ public class Zdaj implements Okna {
     }
 
     public void createLabel() {
-        wypozyczenia = new JLabel("Twoje wypożyczenia");
-        wypozyczenia.setBounds(185, 0, 130, 30);
-        frame.add(wypozyczenia);
+        ksiazki = new JLabel("Ksiazki biblioteki");
+        ksiazki.setBounds(185, 0, 130, 30);
+        frame.add(ksiazki);
+    }
+
+    public List<Ksiazka> wyszukajKsiazki() {
+        Manager manager = new Manager();
+        return manager.getKsiazki();
     }
 
     public void wypozyczoneKsiazki() {
-        Zalogowany zalogowany = new Zalogowany();
-        Person person = zalogowany.getZalogowany();
+        List<Ksiazka> listaKsiazekNiewypozyczonych = wyszukajKsiazki();
         StringBuilder sb = new StringBuilder();
-        if (person.getListaKsiazek().isEmpty()) {
-            pole.setText("Nie masz wypożyczonych książek");
+        if (listaKsiazekNiewypozyczonych.isEmpty()) {
+            pole.setText("Biblioteka nie posiada ksiażek");
         } else {
-            for (Ksiazka ksiazka : person.getListaKsiazek()) {
+            for (Ksiazka ksiazka : listaKsiazekNiewypozyczonych) {
                 sb.append(ksiazka)
                         .append("\n");
             }
@@ -68,15 +82,15 @@ public class Zdaj implements Okna {
         }
     }
 
-    public void zdajKsiazke() {
+    public void zdajKsiazke(List<Ksiazka> ksiazki) {
         oddaj.addActionListener(a -> {
-            Ksiazka ksiazka;
             if (sprawdzenieNrKsiazki()) {
                 int id = Integer.parseInt(nrKsiazki.getText());
-                Zalogowany zalogowany = new Zalogowany();
-                Person person = zalogowany.getZalogowany();
-                ksiazka = pobranieKsiazki(person, id);
-                oddanieKsiazki(person, ksiazka);
+                for (Ksiazka ksiazka : ksiazki) {
+                    if (ksiazka.getId() == id) {
+                        usuwanieKsiazki(ksiazka);
+                    }
+                }
             }
         });
     }
@@ -86,23 +100,10 @@ public class Zdaj implements Okna {
         return walidacjaDanych.validateNumber(nrKsiazki.getText());
     }
 
-    public Ksiazka pobranieKsiazki(Person person, int id) {
-        if (!person.getListaKsiazek().isEmpty()) {
-            for (Ksiazka ksiazka : person.getListaKsiazek()) {
-                if (ksiazka.getId() == id) {
-                    return ksiazka;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void oddanieKsiazki(Person person, Ksiazka ksiazka) {
+    public void usuwanieKsiazki(Ksiazka ksiazka) {
         if (ksiazka != null) {
-            person.usunKsiazke(ksiazka);
-            ksiazka.setCzyWypozyczona(false);
             Manager manager = new Manager();
-            manager.removeKsiazka(person, ksiazka);
+            manager.removeKsiazka(ksiazka);
             usuwanieElementow();
         } else {
             wypozyczoneKsiazki();
@@ -112,17 +113,16 @@ public class Zdaj implements Okna {
     public void powrotListener() {
         powrotDoMenu.addActionListener(a -> {
             usuwanieElementow();
-
         });
     }
 
     public void usuwanieElementow() {
-        frame.remove(wypozyczenia);
         frame.remove(pole);
         frame.remove(nrKsiazki);
         frame.remove(oddaj);
         frame.remove(powrotDoMenu);
-        Wypozyczanie w = new Wypozyczanie();
+        frame.remove(ksiazki);
+        Administrator administrator = new Administrator();
     }
 
 }

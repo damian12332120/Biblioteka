@@ -8,21 +8,24 @@ import java.util.List;
 public class Manager {
 
     private HibernateConnection hibernateConnection = new HibernateConnection();
-
-
-    public void addPerson(Person person) {
+    private Session session;
+    private Transaction transaction;
+    
+    public void session() {
         hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session = hibernateConnection.getSessiong();
+        transaction = session.beginTransaction();
+    }
+    
+    public void addPerson(Person person) {
+        session();
         session.save(person);
         transaction.commit();
         session.close();
     }
 
     public List<Person> getPersons() {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         List persons = session.createQuery("From Person").list();
         transaction.commit();
         session.close();
@@ -30,9 +33,7 @@ public class Manager {
     }
 
     public List<Ksiazka> getKsiazki(String poCzym, String name) {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         String hql = String.format("From Ksiazka e Where e.%s = '%s' and e.czyWypozyczona = '0'", poCzym, name);
         List ksiazki = session.createQuery(hql).list();
         transaction.commit();
@@ -41,9 +42,7 @@ public class Manager {
     }
 
     public List<Ksiazka> getKsiazki() {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         String hql = "From Ksiazka e Where e.czyWypozyczona = '0'";
         List ksiazki = session.createQuery(hql).list();
         transaction.commit();
@@ -53,9 +52,7 @@ public class Manager {
     }
 
     public void addKsiazka(Ksiazka ksiazka) {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         session.save(ksiazka);
         transaction.commit();
         session.close();
@@ -71,18 +68,14 @@ public class Manager {
     }
 
     public void removeKsiazka(Ksiazka ksiazka) {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         session.remove(ksiazka);
         transaction.commit();
         session.close();
     }
 
     public void doItKsiazka(Person person, Ksiazka ksiazka) {
-        hibernateConnection.connect();
-        Session session = hibernateConnection.getSessiong();
-        Transaction transaction = session.beginTransaction();
+        session();
         session.update(person);
         session.update(ksiazka);
         transaction.commit();
